@@ -6,7 +6,7 @@ import { router } from 'expo-router';
 import { commonStyles, colors, buttonStyles } from '../styles/commonStyles';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
-import { genres } from '../data/mockData';
+import { genres, createTrialInfo } from '../data/mockData';
 
 export default function ArtistRegistrationScreen() {
   const [formData, setFormData] = useState({
@@ -42,11 +42,19 @@ export default function ArtistRegistrationScreen() {
       return;
     }
 
-    console.log('Artist registration data:', { ...formData, genres: selectedGenres });
+    // Create trial info for new artist
+    const trialInfo = createTrialInfo();
+    
+    console.log('Artist registration data:', { 
+      ...formData, 
+      genres: selectedGenres,
+      trialInfo 
+    });
+    
     Alert.alert(
-      'Registration Submitted!',
-      'Your artist profile is under review. You will receive a verification email within 24 hours.',
-      [{ text: 'OK', onPress: () => router.replace('/') }]
+      '🎉 Welcome to BidStar!',
+      `Your artist profile has been created successfully!\n\n✨ You now have a 20-day FREE TRIAL to post your music and showcase your talent.\n\n📅 Trial ends: ${new Date(trialInfo.trialEndDate).toLocaleDateString()}\n🎵 You can post up to 20 music tracks during your trial.\n\nStart posting your music now and get discovered by record labels!`,
+      [{ text: 'Start Posting Music!', onPress: () => router.replace('/') }]
     );
   };
 
@@ -63,6 +71,32 @@ export default function ArtistRegistrationScreen() {
         </View>
 
         <View style={{ paddingHorizontal: 20, paddingBottom: 20 }}>
+          {/* Free Trial Banner */}
+          <View style={[commonStyles.card, { 
+            backgroundColor: colors.primary, 
+            marginBottom: 20,
+            borderRadius: 16
+          }]}>
+            <View style={[commonStyles.row, { marginBottom: 12 }]}>
+              <Icon name="gift" size={24} color={colors.text} />
+              <Text style={[commonStyles.text, { fontWeight: '700', marginLeft: 12, fontSize: 18 }]}>
+                20-Day FREE Trial!
+              </Text>
+            </View>
+            <Text style={[commonStyles.text, { marginBottom: 8 }]}>
+              🎵 Post up to 20 music tracks
+            </Text>
+            <Text style={[commonStyles.text, { marginBottom: 8 }]}>
+              🎯 Get discovered by record labels
+            </Text>
+            <Text style={[commonStyles.text, { marginBottom: 8 }]}>
+              💰 No entry fees during trial
+            </Text>
+            <Text style={[commonStyles.text]}>
+              🚀 Build your fanbase and portfolio
+            </Text>
+          </View>
+
           {/* Basic Information */}
           <View style={{ marginBottom: 30 }}>
             <Text style={[commonStyles.subtitle, { marginBottom: 20 }]}>Basic Information</Text>
@@ -216,7 +250,7 @@ export default function ArtistRegistrationScreen() {
                   <Text style={{ color: colors.primary }}>Terms of Service</Text>
                   {' '}and{' '}
                   <Text style={{ color: colors.primary }}>Privacy Policy</Text>
-                  . I understand that there is a $1 entry fee for each auction I participate in.
+                  . I understand that after my 20-day free trial, there will be a $1 entry fee for each auction I participate in.
                 </Text>
               </View>
             </TouchableOpacity>
@@ -224,7 +258,7 @@ export default function ArtistRegistrationScreen() {
 
           {/* Submit Button */}
           <Button
-            text="Submit Registration"
+            text="Start My Free Trial!"
             onPress={handleSubmit}
             style={buttonStyles.primary}
           />
