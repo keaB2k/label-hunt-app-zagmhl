@@ -216,7 +216,7 @@ export default function ArtistRegistrationScreen() {
                   <Text style={{ color: colors.primary }}>Terms of Service</Text>
                   {' '}and{' '}
                   <Text style={{ color: colors.primary }}>Privacy Policy</Text>
-                  . I understand that there is a $50 entry fee for each auction I participate in.
+                  . I understand that there is a $1 entry fee for each auction I participate in.
                 </Text>
               </View>
             </TouchableOpacity>

@@ -117,7 +117,7 @@ export const mockAuctions: Auction[] = [
     currentBid: 12500,
     bidCount: 8,
     status: 'live',
-    entryFee: 50
+    entryFee: 1
   },
   {
     id: '2',
@@ -130,7 +130,7 @@ export const mockAuctions: Auction[] = [
     currentBid: 2000,
     bidCount: 0,
     status: 'upcoming',
-    entryFee: 50
+    entryFee: 1
   },
   {
     id: '3',
@@ -143,7 +143,7 @@ export const mockAuctions: Auction[] = [
     currentBid: 8750,
     bidCount: 12,
     status: 'ended',
-    entryFee: 50,
+    entryFee: 1,
     winner: 'Afro Fusion Records'
   }
 ];
