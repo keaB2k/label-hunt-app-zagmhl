@@ -16,6 +16,30 @@ export interface Artist {
   rating: number;
   totalBids: number;
   joinDate: string;
+  trialInfo: TrialInfo;
+  musicPosts: MusicPost[];
+}
+
+export interface TrialInfo {
+  isOnTrial: boolean;
+  trialStartDate: string;
+  trialEndDate: string;
+  daysRemaining: number;
+  postsUsed: number;
+  maxPosts: number;
+}
+
+export interface MusicPost {
+  id: string;
+  title: string;
+  description: string;
+  genre: string;
+  duration: number;
+  uploadDate: string;
+  likes: number;
+  plays: number;
+  coverImage?: string;
+  audioUrl?: string;
 }
 
 export interface MusicSample {
