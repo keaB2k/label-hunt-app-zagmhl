@@ -11,13 +11,21 @@ export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState<'discover' | 'auctions'>('discover');
   const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
 
+  // Mock current user - in real app this would come from authentication
+  const currentUser = {
+    type: 'artist',
+    artistId: '2' // Thabo Beats (on trial)
+  };
+
+  const currentArtist = mockArtists.find(artist => artist.id === currentUser.artistId);
+
   useEffect(() => {
     // Check if user has seen onboarding before
     // In a real app, this would check AsyncStorage or user authentication
     const checkFirstTime = async () => {
       try {
         // Simulate checking storage
-        const hasSeenOnboarding = false; // This would be from AsyncStorage
+        const hasSeenOnboarding = true; // Changed to true to skip onboarding for demo
         setIsFirstTime(!hasSeenOnboarding);
       } catch (error) {
         console.log('Error checking first time status:', error);
@@ -72,6 +80,41 @@ export default function HomeScreen() {
         </Link>
       </View>
 
+      {/* Trial Banner for Artists */}
+      {currentUser.type === 'artist' && currentArtist?.trialInfo.isOnTrial && (
+        <View style={[commonStyles.card, { 
+          marginHorizontal: 20,
+          marginBottom: 20,
+          backgroundColor: colors.primary
+        }]}>
+          <View style={[commonStyles.spaceBetween, { marginBottom: 8 }]}>
+            <Text style={[commonStyles.text, { fontWeight: '700' }]}>
+              🎁 Free Trial: {currentArtist.trialInfo.daysRemaining} days left
+            </Text>
+            <TouchableOpacity onPress={() => router.push('/post-music')}>
+              <Icon name="add-circle" size={24} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+          <Text style={[commonStyles.text, { marginBottom: 12 }]}>
+            Posts: {currentArtist.trialInfo.postsUsed}/{currentArtist.trialInfo.maxPosts} used
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.text,
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 20,
+              alignSelf: 'flex-start'
+            }}
+            onPress={() => router.push('/post-music')}
+          >
+            <Text style={[commonStyles.text, { color: colors.primary, fontWeight: '600' }]}>
+              Post Music Now
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       {/* Tab Navigation */}
       <View style={[commonStyles.row, { paddingHorizontal: 20, marginBottom: 20 }]}>
         <TouchableOpacity
@@ -118,6 +161,18 @@ export default function HomeScreen() {
                         </Text>
                         {artist.verified && (
                           <Icon name="checkmark-circle" size={16} color={colors.success} />
+                        )}
+                        {artist.trialInfo.isOnTrial && (
+                          <View style={[commonStyles.badge, { 
+                            marginLeft: 8,
+                            backgroundColor: colors.success,
+                            paddingHorizontal: 6,
+                            paddingVertical: 2
+                          }]}>
+                            <Text style={[commonStyles.badgeText, { fontSize: 10 }]}>
+                              TRIAL
+                            </Text>
+                          </View>
                         )}
                       </View>
                       <Text style={[commonStyles.textSecondary, { marginVertical: 4 }]}>
@@ -249,6 +304,14 @@ export default function HomeScreen() {
             <Text style={[commonStyles.textSecondary, { fontSize: 12, marginTop: 4 }]}>Auctions</Text>
           </TouchableOpacity>
         </Link>
+        {currentUser.type === 'artist' && (
+          <Link href="/my-music" asChild>
+            <TouchableOpacity style={[commonStyles.center, { flex: 1 }]}>
+              <Icon name="musical-notes" size={24} color={colors.text} />
+              <Text style={[commonStyles.textSecondary, { fontSize: 12, marginTop: 4 }]}>My Music</Text>
+            </TouchableOpacity>
+          </Link>
+        )}
         <Link href="/profile" asChild>
           <TouchableOpacity style={[commonStyles.center, { flex: 1 }]}>
             <Icon name="person" size={24} color={colors.text} />
