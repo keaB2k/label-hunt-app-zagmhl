@@ -1,14 +1,45 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { commonStyles, colors } from '../styles/commonStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from 'expo-router';
+import { Link, router, Redirect } from 'expo-router';
 import Icon from '../components/Icon';
 import { mockAuctions, mockArtists } from '../data/mockData';
 
 export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState<'discover' | 'auctions'>('discover');
+  const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Check if user has seen onboarding before
+    // In a real app, this would check AsyncStorage or user authentication
+    const checkFirstTime = async () => {
+      try {
+        // Simulate checking storage
+        const hasSeenOnboarding = false; // This would be from AsyncStorage
+        setIsFirstTime(!hasSeenOnboarding);
+      } catch (error) {
+        console.log('Error checking first time status:', error);
+        setIsFirstTime(true);
+      }
+    };
+
+    checkFirstTime();
+  }, []);
+
+  // Show loading or redirect to onboarding
+  if (isFirstTime === null) {
+    return (
+      <SafeAreaView style={[commonStyles.container, commonStyles.center]}>
+        <Text style={commonStyles.text}>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (isFirstTime) {
+    return <Redirect href="/onboarding" />;
+  }
 
   const liveAuctions = mockAuctions.filter(auction => auction.status === 'live');
   const upcomingAuctions = mockAuctions.filter(auction => auction.status === 'upcoming');
