@@ -7,7 +7,6 @@ import { commonStyles, colors, buttonStyles } from '../styles/commonStyles';
 import SimpleBottomSheet from '../components/BottomSheet';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
-import { mockArtists } from '../data/mockData';
 
 export default function ProfileScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -17,32 +16,15 @@ export default function ProfileScreen() {
 
   // Mock user data - in real app this would come from authentication
   const userData = {
-    name: 'Thabo Beats',
-    email: 'thabo@bidstar.com',
+    name: 'Demo User',
+    email: 'demo@bidstar.com',
     type: 'artist', // or 'label'
     verified: false,
-    joinDate: '2024-02-20',
-    profileImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400'
+    joinDate: '2024-01-15',
+    profileImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400'
   };
 
-  // Get current artist data for trial info
-  const currentArtist = mockArtists.find(artist => artist.name === userData.name);
-
   const menuItems = [
-    {
-      icon: 'musical-notes',
-      title: 'My Music',
-      subtitle: `${currentArtist?.musicPosts.length || 0} tracks posted`,
-      onPress: () => router.push('/my-music'),
-      showBadge: currentArtist?.trialInfo.isOnTrial
-    },
-    {
-      icon: 'add-circle',
-      title: 'Post Music',
-      subtitle: 'Share your latest tracks',
-      onPress: () => router.push('/post-music'),
-      showBadge: currentArtist?.trialInfo.isOnTrial
-    },
     {
       icon: 'person-outline',
       title: 'Edit Profile',
@@ -127,72 +109,22 @@ export default function ProfileScreen() {
           </Text>
         </View>
 
-        {/* Trial Status for Artists */}
-        {userData.type === 'artist' && currentArtist?.trialInfo.isOnTrial && (
-          <View style={[commonStyles.card, { 
-            backgroundColor: colors.primary,
-            marginBottom: 20
-          }]}>
-            <View style={[commonStyles.spaceBetween, { marginBottom: 12 }]}>
-              <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 18 }]}>
-                🎁 Free Trial Active
-              </Text>
-              <Text style={[commonStyles.text, { fontWeight: '600' }]}>
-                {currentArtist.trialInfo.daysRemaining} days left
-              </Text>
-            </View>
-            <View style={[commonStyles.spaceBetween, { marginBottom: 12 }]}>
-              <Text style={[commonStyles.text]}>
-                Music posts: {currentArtist.trialInfo.postsUsed}/{currentArtist.trialInfo.maxPosts}
-              </Text>
-              <View style={{
-                width: 100,
-                height: 6,
-                backgroundColor: colors.backgroundAlt,
-                borderRadius: 3,
-                overflow: 'hidden'
-              }}>
-                <View style={{
-                  width: `${(currentArtist.trialInfo.postsUsed / currentArtist.trialInfo.maxPosts) * 100}%`,
-                  height: '100%',
-                  backgroundColor: colors.text
-                }} />
-              </View>
-            </View>
-            <TouchableOpacity
-              style={[buttonStyles.secondary, { 
-                backgroundColor: colors.text,
-                borderColor: colors.text,
-                paddingVertical: 8
-              }]}
-              onPress={() => router.push('/post-music')}
-            >
-              <Text style={[commonStyles.text, { color: colors.primary, fontWeight: '600' }]}>
-                Post Music Now
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
         {/* Quick Stats */}
         <View style={[commonStyles.row, { marginBottom: 20 }]}>
           <View style={[commonStyles.card, { flex: 1, marginRight: 8, alignItems: 'center' }]}>
             <Text style={[commonStyles.text, { fontSize: 24, fontWeight: '700', color: colors.primary }]}>
-              {userData.type === 'artist' ? currentArtist?.musicPosts.length || 0 : 12}
+              12
             </Text>
             <Text style={[commonStyles.textSecondary, { fontSize: 12 }]}>
-              {userData.type === 'artist' ? 'Music Posts' : 'Bids Placed'}
+              {userData.type === 'artist' ? 'Auctions' : 'Bids Placed'}
             </Text>
           </View>
           <View style={[commonStyles.card, { flex: 1, marginLeft: 8, alignItems: 'center' }]}>
             <Text style={[commonStyles.text, { fontSize: 24, fontWeight: '700', color: colors.success }]}>
-              {userData.type === 'artist' ? 
-                (currentArtist?.musicPosts.reduce((sum, post) => sum + post.plays, 0) || 0) : 
-                4.8
-              }
+              4.8
             </Text>
             <Text style={[commonStyles.textSecondary, { fontSize: 12 }]}>
-              {userData.type === 'artist' ? 'Total Plays' : 'Rating'}
+              Rating
             </Text>
           </View>
         </View>
@@ -218,23 +150,9 @@ export default function ProfileScreen() {
                   <Icon name={item.icon as any} size={20} color={colors.text} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <View style={[commonStyles.row, { alignItems: 'center' }]}>
-                    <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 2 }]}>
-                      {item.title}
-                    </Text>
-                    {item.showBadge && (
-                      <View style={[commonStyles.badge, { 
-                        marginLeft: 8,
-                        backgroundColor: colors.success,
-                        paddingHorizontal: 6,
-                        paddingVertical: 2
-                      }]}>
-                        <Text style={[commonStyles.badgeText, { fontSize: 10 }]}>
-                          FREE
-                        </Text>
-                      </View>
-                    )}
-                  </View>
+                  <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 2 }]}>
+                    {item.title}
+                  </Text>
                   <Text style={[commonStyles.textSecondary, { fontSize: 12 }]}>
                     {item.subtitle}
                   </Text>
